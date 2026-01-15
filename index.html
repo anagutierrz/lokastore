@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loka Store DR | Catálogo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .filter-btn.active { background-color: #000; color: #fff; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50 p-4 text-center">
+        <h1 class="text-2xl font-bold tracking-widest uppercase">Loka Store DR</h1>
+        <p class="text-xs text-gray-500">Catálogo actualizado vía Google Sheets</p>
+    </header>
+
+    <nav id="categories" class="flex flex-wrap justify-center gap-2 p-4 bg-white border-b">
+        <button onclick="filterProducts('todos')" class="filter-btn px-4 py-1 rounded-full border text-sm active">Todos</button>
+        </nav>
+
+    <main id="catalog" class="max-w-6xl mx-auto p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <p class="col-span-full text-center py-10">Cargando productos increíbles...</p>
+    </main>
+
+    <script>
+        // CONFIGURACIÓN: Pega aquí el ID de tu Google Sheet
+        const SHEET_ID = 'TU_ID_DE_GOOGLE_SHEETS_AQUI';
+        const SHEET_TITLE = 'Hoja 1'; // Nombre de la pestaña
+        const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_TITLE}`;
+
+        let allProducts = [];
+
+        async function loadData() {
+            try {
+                const response = await fetch(URL);
+                const text = await response.text();
+                // Limpiar el JSON que devuelve Google
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                
+                const rows = json.table.rows;
+                allProducts = rows.map(row => ({
+                    nombre: row.c[0]?.v || '',
+                    categoria: row.c[1]?.v || '',
+                    precio: row.c[2]?.v || '',
+                    imagen: row.c[3]?.v || 'https://via.placeholder.com/300',
+                    enlace: row.c[4]?.v || '#'
+                }));
+
+                renderCategories();
+                renderProducts(allProducts);
+            } catch (error) {
+                console.error("Error cargando datos:", error);
+                document.getElementById('catalog').innerHTML = "Error al cargar el catálogo.";
+            }
+        }
+
+        function renderCategories() {
+            const categories = ['todos', ...new Set(allProducts.map(p => p.categoria))];
+            const nav = document.getElementById('categories');
+            nav.innerHTML = categories.map(cat => `
+                <button onclick="filterProducts('${cat}')" class="filter-btn px-4 py-1 rounded-full border text-sm capitalize">${cat}</button>
+            `).join('');
+        }
+
+        function renderProducts(products) {
+            const container = document.getElementById('catalog');
+            container.innerHTML = products.map(p => `
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 flex flex-col">
+                    <img src="${p.imagen}" alt="${p.nombre}" class="w-full h-48 object-cover">
+                    <div class="p-3 flex flex-col flex-grow">
+                        <span class="text-[10px] uppercase text-gray-400 font-bold">${p.categoria}</span>
+                        <h3 class="text-sm font-semibold mb-2">${p.nombre}</h3>
+                        <p class="text-md font-bold text-black mt-auto">RD$ ${p.precio}</p>
+                        <a href="${p.enlace}" target="_blank" class="block text-center bg-green-500 text-white text-xs py-2 mt-3 rounded hover:bg-green-600 transition">
+                            Pedir por WhatsApp
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts(cat) {
+            // Actualizar estilo botones
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === cat.toLowerCase());
+            });
+
+            const filtered = cat === 'todos' ? allProducts : allProducts.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
+            renderProducts(filtered);
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
