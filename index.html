@@ -13,56 +13,65 @@
 
     <header class="bg-white shadow-sm sticky top-0 z-50 p-4 text-center">
         <h1 class="text-2xl font-bold tracking-widest uppercase">Loka Store DR</h1>
-        <p class="text-xs text-gray-500">Catálogo actualizado vía Google Sheets</p>
+        <p class="text-xs text-gray-500 italic">Nueva Colección Disponible</p>
     </header>
 
     <nav id="categories" class="flex flex-wrap justify-center gap-2 p-4 bg-white border-b">
         <button onclick="filterProducts('todos')" class="filter-btn px-4 py-1 rounded-full border text-sm active">Todos</button>
-        </nav>
+        <button onclick="filterProducts('Maquillaje')" class="filter-btn px-4 py-1 rounded-full border text-sm">Maquillaje</button>
+        <button onclick="filterProducts('Accesorios')" class="filter-btn px-4 py-1 rounded-full border text-sm">Accesorios</button>
+        <button onclick="filterProducts('Cuidado')" class="filter-btn px-4 py-1 rounded-full border text-sm">Cuidado</button>
+    </nav>
 
     <main id="catalog" class="max-w-6xl mx-auto p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <p class="col-span-full text-center py-10">Cargando productos increíbles...</p>
-    </main>
+        </main>
 
     <script>
-        // CONFIGURACIÓN: Pega aquí el ID de tu Google Sheet
-        const SHEET_ID = 'TU_ID_DE_GOOGLE_SHEETS_AQUI';
-        const SHEET_TITLE = 'Hoja 1'; // Nombre de la pestaña
-        const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_TITLE}`;
-
-        let allProducts = [];
-
-        async function loadData() {
-            try {
-                const response = await fetch(URL);
-                const text = await response.text();
-                // Limpiar el JSON que devuelve Google
-                const json = JSON.parse(text.substr(47).slice(0, -2));
-                
-                const rows = json.table.rows;
-                allProducts = rows.map(row => ({
-                    nombre: row.c[0]?.v || '',
-                    categoria: row.c[1]?.v || '',
-                    precio: row.c[2]?.v || '',
-                    imagen: row.c[3]?.v || 'https://via.placeholder.com/300',
-                    enlace: row.c[4]?.v || '#'
-                }));
-
-                renderCategories();
-                renderProducts(allProducts);
-            } catch (error) {
-                console.error("Error cargando datos:", error);
-                document.getElementById('catalog').innerHTML = "Error al cargar el catálogo.";
+        // DATOS DE PRUEBA (Para mostrar a la clienta ahora mismo)
+        const demoProducts = [
+            {
+                nombre: "Paleta de Sombras 'Glam'",
+                categoria: "Maquillaje",
+                precio: "1,200",
+                imagen: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&q=80",
+                enlace: "https://wa.me/18490000000"
+            },
+            {
+                nombre: "Set de Brochas Profesionales",
+                categoria: "Maquillaje",
+                precio: "1,500",
+                imagen: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500&q=80",
+                enlace: "https://wa.me/18490000000"
+            },
+            {
+                nombre: "Cartera Crossbody Negra",
+                categoria: "Accesorios",
+                precio: "2,450",
+                imagen: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&q=80",
+                enlace: "https://wa.me/18490000000"
+            },
+            {
+                nombre: "Serum Facial Hidratante",
+                categoria: "Cuidado",
+                precio: "950",
+                imagen: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&q=80",
+                enlace: "https://wa.me/18490000000"
+            },
+            {
+                nombre: "Lentes de Sol Retro",
+                categoria: "Accesorios",
+                precio: "800",
+                imagen: "https://images.unsplash.com/photo-1511499767390-a7335958beab?w=500&q=80",
+                enlace: "https://wa.me/18490000000"
+            },
+            {
+                nombre: "Labial Matte Larga Duración",
+                categoria: "Maquillaje",
+                precio: "450",
+                imagen: "https://images.unsplash.com/photo-1586790170053-202e89693bc1?w=500&q=80",
+                enlace: "https://wa.me/18490000000"
             }
-        }
-
-        function renderCategories() {
-            const categories = ['todos', ...new Set(allProducts.map(p => p.categoria))];
-            const nav = document.getElementById('categories');
-            nav.innerHTML = categories.map(cat => `
-                <button onclick="filterProducts('${cat}')" class="filter-btn px-4 py-1 rounded-full border text-sm capitalize">${cat}</button>
-            `).join('');
-        }
+        ];
 
         function renderProducts(products) {
             const container = document.getElementById('catalog');
@@ -70,11 +79,11 @@
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 flex flex-col">
                     <img src="${p.imagen}" alt="${p.nombre}" class="w-full h-48 object-cover">
                     <div class="p-3 flex flex-col flex-grow">
-                        <span class="text-[10px] uppercase text-gray-400 font-bold">${p.categoria}</span>
+                        <span class="text-[10px] uppercase text-pink-500 font-bold">${p.categoria}</span>
                         <h3 class="text-sm font-semibold mb-2">${p.nombre}</h3>
                         <p class="text-md font-bold text-black mt-auto">RD$ ${p.precio}</p>
-                        <a href="${p.enlace}" target="_blank" class="block text-center bg-green-500 text-white text-xs py-2 mt-3 rounded hover:bg-green-600 transition">
-                            Pedir por WhatsApp
+                        <a href="${p.enlace}" target="_blank" class="block text-center bg-black text-white text-xs py-2 mt-3 rounded hover:opacity-80 transition">
+                            Consultar Disponibilidad
                         </a>
                     </div>
                 </div>
@@ -82,16 +91,17 @@
         }
 
         function filterProducts(cat) {
-            // Actualizar estilo botones
+            // Actualizar botones
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.innerText.toLowerCase() === cat.toLowerCase());
             });
 
-            const filtered = cat === 'todos' ? allProducts : allProducts.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
+            const filtered = cat === 'todos' ? demoProducts : demoProducts.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
             renderProducts(filtered);
         }
 
-        loadData();
+        // Cargar datos de prueba al iniciar
+        renderProducts(demoProducts);
     </script>
 </body>
 </html>
