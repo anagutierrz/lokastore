@@ -5,108 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loka Store DR | Catálogo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --rosa-loka: #e9c8cf;
-            --rosa-fuerte: #d6336c;
-        }
-        body { font-family: 'Montserrat', sans-serif; background-color: #f9f9f9; }
-        h1, .logo-font { font-family: 'Playfair Display', serif; }
-        
-        .filter-btn.active {
-            background-color: var(--rosa-fuerte);
-            color: white;
-            border-color: var(--rosa-fuerte);
-        }
-        .product-card {
-            transition: transform 0.2s ease;
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
+        body { font-family: 'Montserrat', sans-serif; background-color: #fdfbfb; }
+        .pink-gradient { background: linear-gradient(135deg, #fceef0 0%, #f7d7da 100%); }
+        .filter-btn.active { background-color: #d6336c; color: white; border-color: #d6336c; }
+        .product-card { transition: all 0.3s ease; border-radius: 20px; overflow: hidden; background: white; }
+        .product-card:hover { transform: translateY(-10px); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        .logo-circle { width: 100px; height: 100px; border-radius: 50%; border: 2px solid #eee; object-fit: cover; }
     </style>
 </head>
 <body>
 
-    <header class="bg-white py-6 shadow-sm border-b border-gray-100">
-        <div class="container mx-auto px-4 flex flex-col items-center">
-            <div class="flex items-center gap-4 mb-2">
-                <div class="w-12 h-12 bg-[#e9c8cf] rounded-full flex items-center justify-center border-2 border-black">
-                    <span class="logo-font text-2xl font-bold text-black">LS</span>
-                </div>
-                <h1 class="text-3xl tracking-widest font-bold uppercase text-gray-900">Loka Store DR</h1>
-            </div>
-            <p class="text-gray-400 text-xs tracking-widest uppercase">Catálogo en línea • República Dominicana</p>
-        </div>
+    <header class="py-8 flex flex-col items-center bg-white border-b border-pink-100">
+        <img src="logo.png" alt="Loka's Trendy Store" class="logo-circle mb-4 shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=Loka+Store&background=fceef0&color=d6336c'">
+        <h1 class="text-2xl font-semibold tracking-tighter text-gray-800 uppercase">Loka's Trendy Store</h1>
+        <p class="text-[10px] tracking-[0.2em] text-pink-500 font-bold uppercase mt-1">Catálogo de Referencia</p>
     </header>
 
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
-        <div id="categories" class="flex justify-center gap-2 p-4 overflow-x-auto no-scrollbar">
-            <button onclick="filterProducts('todos')" class="filter-btn active px-5 py-1.5 rounded-full border border-gray-200 text-sm font-medium">Todos</button>
-            <button onclick="filterProducts('Maquillaje')" class="filter-btn px-5 py-1.5 rounded-full border border-gray-200 text-sm font-medium">Maquillaje</button>
-            <button onclick="filterProducts('Accesorios')" class="filter-btn px-5 py-1.5 rounded-full border border-gray-200 text-sm font-medium">Accesorios</button>
-            <button onclick="filterProducts('Cuidado')" class="filter-btn px-5 py-1.5 rounded-full border border-gray-200 text-sm font-medium">Cuidado</button>
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md py-4 border-b">
+        <div id="categories" class="flex justify-center gap-3 overflow-x-auto px-4">
+            <button onclick="filterProducts('todos')" class="filter-btn active px-6 py-2 rounded-full border border-gray-100 text-xs font-bold uppercase tracking-widest">Todos</button>
+            <button onclick="filterProducts('Maquillaje')" class="filter-btn px-6 py-2 rounded-full border border-gray-100 text-xs font-bold uppercase tracking-widest">Maquillaje</button>
+            <button onclick="filterProducts('Accesorios')" class="filter-btn px-6 py-2 rounded-full border border-gray-100 text-xs font-bold uppercase tracking-widest">Accesorios</button>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-10">
         <div id="catalog" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             </div>
     </main>
 
-    <footer class="bg-white border-t py-8 mt-12 text-center">
-        <p class="text-gray-500 text-sm">© 2026 Loka Store DR. Todos los derechos reservados.</p>
+    <footer class="py-10 text-center text-gray-400 text-[10px] uppercase tracking-widest">
+        Loka Store DR • Santo Domingo, RD
     </footer>
 
     <script>
-        // DATOS DE REFERENCIA PARA LA CLIENTA
-        const demoProducts = [
+        // DATOS INTERNOS (No dependen de Google Sheets por ahora para que funcione YA)
+        const products = [
             {
-                nombre: "Paleta Professional Glam",
+                nombre: "Paleta Glamour Rose",
                 categoria: "Maquillaje",
-                precio: "1,250",
-                imagen: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600",
-                whatsapp: "https://wa.me/18490000000?text=Hola! Me interesa la Paleta Glam"
+                precio: "1,200",
+                imagen: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600",
+                link: "https://wa.me/18490000000"
             },
             {
-                nombre: "Cartera Nude Elegance",
+                nombre: "Mini Bag Trendy",
                 categoria: "Accesorios",
-                precio: "2,800",
+                precio: "1,850",
                 imagen: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600",
-                whatsapp: "https://wa.me/18490000000?text=Hola! Me interesa la Cartera Nude"
+                link: "https://wa.me/18490000000"
             },
             {
-                nombre: "Set de Brochas Rosé",
+                nombre: "Set Brochas Profesionales",
                 categoria: "Maquillaje",
                 precio: "950",
-                imagen: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600",
-                whatsapp: "https://wa.me/18490000000?text=Hola! Me interesa el Set de Brochas"
+                imagen: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=600",
+                link: "https://wa.me/18490000000"
             },
             {
-                nombre: "Serum Facial Glow",
-                categoria: "Cuidado",
-                precio: "1,100",
-                imagen: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600",
-                whatsapp: "https://wa.me/18490000000?text=Hola! Me interesa el Serum Glow"
+                nombre: "Lentes Retro Pink",
+                categoria: "Accesorios",
+                precio: "750",
+                imagen: "https://images.unsplash.com/photo-1511499767390-a7335958beab?w=600",
+                link: "https://wa.me/18490000000"
             }
         ];
 
-        function renderProducts(products) {
+        function renderProducts(items) {
             const container = document.getElementById('catalog');
-            container.innerHTML = products.map(p => `
-                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-50">
-                    <div class="relative">
-                        <img src="${p.imagen}" alt="${p.nombre}" class="w-full h-56 object-cover">
-                        <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-pink-600 shadow-sm">
+            container.innerHTML = items.map(p => `
+                <div class="product-card shadow-sm border border-pink-50 flex flex-col">
+                    <div class="relative overflow-hidden">
+                        <img src="${p.imagen}" alt="${p.nombre}" class="w-full h-52 object-cover">
+                        <div class="absolute top-2 right-2 bg-black/70 text-white text-[8px] px-2 py-1 rounded-full uppercase font-bold tracking-tighter">
                             ${p.categoria}
-                        </span>
+                        </div>
                     </div>
-                    <div class="p-4 flex flex-col items-center text-center">
-                        <h3 class="text-sm font-semibold text-gray-800 mb-1 h-10 flex items-center">${p.nombre}</h3>
-                        <p class="text-lg font-bold text-gray-900 mb-4">RD$ ${p.precio}</p>
-                        <a href="${p.whatsapp}" target="_blank" class="w-full bg-black text-white text-[11px] uppercase tracking-widest font-bold py-3 rounded-xl hover:bg-gray-800 transition-colors">
-                            Consultar WhatsApp
+                    <div class="p-4 flex flex-col flex-grow items-center">
+                        <h3 class="text-xs font-bold text-gray-700 uppercase tracking-tight text-center mb-2 h-8 overflow-hidden">${p.nombre}</h3>
+                        <p class="text-sm font-light text-pink-600 mb-4 font-bold">RD$ ${p.precio}</p>
+                        <a href="${p.link}" target="_blank" class="w-full bg-black text-white text-[9px] font-bold py-3 rounded-lg text-center uppercase tracking-widest hover:bg-pink-600 transition-colors">
+                            Pedir vía WhatsApp
                         </a>
                     </div>
                 </div>
@@ -114,19 +95,17 @@
         }
 
         function filterProducts(cat) {
-            // Estilo de botones
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if(btn.innerText.toLowerCase() === cat.toLowerCase()) btn.classList.add('active');
             });
 
-            // Filtrado lógico
-            const filtered = cat === 'todos' ? demoProducts : demoProducts.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
+            const filtered = cat === 'todos' ? products : products.filter(p => p.categoria === cat);
             renderProducts(filtered);
         }
 
-        // Iniciar carga
-        window.onload = () => renderProducts(demoProducts);
+        // Ejecutar al cargar la página
+        renderProducts(products);
     </script>
 </body>
 </html>
