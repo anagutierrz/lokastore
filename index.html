@@ -3,60 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loka's Trendy Store</title>
+    <title>Loka's Trendy Store | Catálogo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #fffafb; }
+        body { font-family: sans-serif; background-color: #fffafb; }
         .active-cat { background-color: #000 !important; color: #fff !important; }
-        .product-card { background: white; border-radius: 15px; border: 1px solid #f0e4e6; overflow: hidden; }
+        .card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #f0e4e6; }
     </style>
 </head>
 <body>
 
-    <header class="flex flex-col items-center py-8 bg-white border-b border-pink-100">
+    <header class="flex flex-col items-center py-10 bg-white border-b border-pink-100">
         <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-pink-200 mb-4 shadow-sm">
-            <img src="https://i.imgur.com/8nN79zL.png" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=L&background=fceef0&color=d6336c'">
+            <img src="logo.png" alt="L" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=L&background=fceef0&color=d6336c&size=128'">
         </div>
-        <h1 class="text-xl font-light tracking-[0.2em] uppercase text-gray-800 text-center px-4">Loka's Trendy Store</h1>
+        <h1 class="text-xl font-light tracking-[0.3em] uppercase text-gray-800">Loka's Trendy Store</h1>
     </header>
 
-    <div class="sticky top-0 bg-white/90 backdrop-blur-md z-50 flex justify-center gap-2 p-4 border-b">
-        <button onclick="filter('todos')" id="btn-todos" class="active-cat px-4 py-1 border rounded-full text-[10px] uppercase font-bold">Todos</button>
-        <button onclick="filter('Maquillaje')" id="btn-Maquillaje" class="px-4 py-1 border rounded-full text-[10px] uppercase font-bold text-gray-400">Maquillaje</button>
-        <button onclick="filter('Accesorios')" id="btn-Accesorios" class="px-4 py-1 border rounded-full text-[10px] uppercase font-bold text-gray-400">Accesorios</button>
+    <div class="sticky top-0 bg-white/90 backdrop-blur-sm z-50 flex justify-center gap-2 p-4 border-b">
+        <button onclick="filter('todos')" id="btn-todos" class="active-cat px-4 py-1 border rounded-full text-[10px] font-bold uppercase">Todos</button>
+        <button onclick="filter('Maquillaje')" id="btn-Maquillaje" class="px-4 py-1 border rounded-full text-[10px] font-bold uppercase text-gray-400">Maquillaje</button>
+        <button onclick="filter('Accesorios')" id="btn-Accesorios" class="px-4 py-1 border rounded-full text-[10px] font-bold uppercase text-gray-400">Accesorios</button>
     </div>
 
-    <main class="max-w-5xl mx-auto p-4 grid grid-cols-2 md:grid-cols-4 gap-4" id="grid"></main>
+    <main class="max-w-5xl mx-auto p-4 grid grid-cols-2 md:grid-cols-4 gap-4" id="grid">
+        </main>
 
     <script>
-        const products = [
+        // Datos integrados para que NO falle
+        const items = [
             { n: "Paleta Glam Rose", c: "Maquillaje", p: "1,200", i: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400" },
             { n: "Cartera Minimal", c: "Accesorios", p: "2,500", i: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400" },
-            { n: "Brochas Profesionales", c: "Maquillaje", p: "850", i: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400" },
-            { n: "Lentes de Sol", c: "Accesorios", p: "900", i: "https://images.unsplash.com/photo-1511499767390-a7335958beab?w=400" }
+            { n: "Set de Brochas", c: "Maquillaje", p: "850", i: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400" },
+            { n: "Lentes Trendy", c: "Accesorios", p: "900", i: "https://images.unsplash.com/photo-1511499767390-a7335958beab?w=400" }
         ];
 
-        function render(list) {
-            document.getElementById('grid').innerHTML = list.map(p => `
-                <div class="product-card flex flex-col shadow-sm">
-                    <img src="${p.i}" class="w-full h-40 object-cover">
-                    <div class="p-3 text-center">
-                        <p class="text-[8px] text-pink-500 font-bold uppercase mb-1">${p.c}</p>
-                        <h3 class="text-[10px] font-semibold mb-2 h-8">${p.n}</h3>
-                        <p class="font-bold text-sm mb-3 text-gray-900">RD$ ${p.p}</p>
-                        <a href="https://wa.me/18490000000" class="block bg-black text-white text-[9px] py-2 rounded font-bold uppercase">Consultar</a>
+        function display(list) {
+            const grid = document.getElementById('grid');
+            if (!grid) return;
+            
+            grid.innerHTML = list.map(p => `
+                <div class="card shadow-sm flex flex-col">
+                    <img src="${p.i}" class="w-full h-40 object-cover border-b">
+                    <div class="p-3 text-center flex flex-col flex-grow">
+                        <span class="text-[9px] text-pink-500 font-bold uppercase mb-1">${p.c}</span>
+                        <h3 class="text-[11px] font-semibold h-8 overflow-hidden mb-2">${p.n}</h3>
+                        <p class="font-bold text-gray-900 mb-3 text-sm">RD$ ${p.p}</p>
+                        <a href="https://wa.me/18490000000" target="_blank" class="bg-black text-white py-2 rounded font-bold text-[10px] uppercase">Consultar</a>
                     </div>
                 </div>
             `).join('');
         }
 
         function filter(cat) {
-            document.querySelectorAll('button').forEach(b => b.classList.remove('active-cat'));
-            document.getElementById('btn-' + cat).classList.add('active-cat');
-            render(cat === 'todos' ? products : products.filter(p => p.c === cat));
+            // Limpiar botones
+            document.getElementById('btn-todos').classList.remove('active-cat');
+            document.getElementById('btn-Maquillaje').classList.remove('active-cat');
+            document.getElementById('btn-Accesorios').classList.remove('active-cat');
+            
+            // Activar actual
+            const btn = document.getElementById('btn-' + cat);
+            if (btn) btn.classList.add('active-cat');
+
+            const filtered = cat === 'todos' ? items : items.filter(i => i.c === cat);
+            display(filtered);
         }
 
-        render(products);
+        // IMPORTANTE: Esto asegura que el código corra DESPUÉS de cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            display(items);
+        });
     </script>
 </body>
 </html>
