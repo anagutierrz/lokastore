@@ -3,61 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loka's Trendy Store</title>
+    <title>Loka's Trendy Store | Catálogo</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap');
-        body { background-color: #fffafb; font-family: sans-serif; }
-        .logo-font { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #fffafb; }
+        .brand-font { font-family: 'Playfair Display', serif; }
         .active-cat { background-color: #000 !important; color: #fff !important; }
+        .product-card { background: white; border-radius: 20px; overflow: hidden; transition: transform 0.3s ease; border: 1px solid #fceef0; }
+        .product-card:hover { transform: translateY(-5px); }
+        /* Logo Circle Style */
+        .logo-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 2px solid #000;
+            padding: 3px;
+            background: #fff;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
 
-    <header class="flex flex-col items-center py-10 bg-white border-b border-pink-100">
-        <div class="w-28 h-28 rounded-full overflow-hidden border border-pink-100 mb-4 shadow-sm">
-            <img src="https://i.imgur.com/8nN79zL.png" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=L&background=fceef0&color=d6336c'">
+    <header class="flex flex-col items-center py-10 bg-white border-b border-pink-50 shadow-sm">
+        <div class="mb-4">
+            <img src="https://img.freepik.com/vector-premium/plantilla-logotipo-boutique-ropa-mujer_441059-122.jpg" 
+                 alt="Loka's Logo" 
+                 class="logo-circle shadow-lg">
         </div>
-        <h1 class="logo-font text-3xl text-gray-800 italic">Loka's Trendy Store</h1>
+        <h1 class="brand-font text-3xl italic tracking-tighter text-gray-900">Loka's Trendy Store</h1>
+        <div class="h-px w-20 bg-pink-200 mt-3"></div>
+        <p class="text-[10px] tracking-[0.4em] uppercase text-pink-400 font-bold mt-3">Catálogo de Ropa</p>
     </header>
 
-    <nav class="sticky top-0 bg-white/90 backdrop-blur-md z-50 flex justify-center gap-2 p-4 border-b">
-        <button onclick="f('todos')" id="b-todos" class="active-cat px-6 py-2 border rounded-full text-[10px] font-bold uppercase tracking-widest">Todos</button>
-        <button onclick="f('Vestidos')" id="b-Vestidos" class="px-6 py-2 border rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400">Vestidos</button>
-        <button onclick="f('Conjuntos')" id="b-Conjuntos" class="px-6 py-2 border rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400">Conjuntos</button>
+    <nav class="sticky top-0 bg-white/90 backdrop-blur-md z-50 border-b border-pink-50">
+        <div class="flex justify-center gap-2 p-4">
+            <button onclick="filter('todos')" id="btn-todos" class="active-cat px-6 py-2 border rounded-full text-[10px] font-bold uppercase tracking-widest transition-all">Todos</button>
+            <button onclick="filter('Vestidos')" id="btn-Vestidos" class="px-6 py-2 border rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400">Vestidos</button>
+            <button onclick="filter('Conjuntos')" id="btn-Conjuntos" class="px-6 py-2 border rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400">Conjuntos</button>
+        </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto p-6 grid grid-cols-2 md:grid-cols-4 gap-6" id="grid"></main>
+    <main class="max-w-6xl mx-auto p-6 grid grid-cols-2 md:grid-cols-4 gap-6" id="grid">
+        </main>
+
+    <footer class="py-10 text-center text-gray-300 text-[10px] uppercase tracking-widest">
+        RD • Santo Domingo • Loka's Trendy Store
+    </footer>
 
     <script>
-        const p = [
-            {n:"Vestido Aria", c:"Vestidos", pr:"1,850", i:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"},
-            {n:"Conjunto Lino", c:"Conjuntos", pr:"2,400", i:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500"},
-            {n:"Maxi Vestido Summer", c:"Vestidos", pr:"2,100", i:"https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500"},
-            {n:"Set Chaleco", c:"Conjuntos", pr:"2,250", i:"https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=500"}
+        const clothes = [
+            { n: "Vestido Floral Aria", c: "Vestidos", p: "1,850", i: "https://images.unsplash.com/photo-1572804013307-a9a11117bb41?w=500" },
+            { n: "Conjunto Lino Beige", c: "Conjuntos", p: "2,400", i: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500" },
+            { n: "Maxi Vestido Summer", c: "Vestidos", p: "2,100", i: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500" },
+            { n: "Set Chaleco & Short", c: "Conjuntos", p: "2,250", i: "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=500" }
         ];
 
-        function r(l) {
-            document.getElementById('grid').innerHTML = l.map(x => `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-pink-50">
-                    <img src="${x.i}" class="w-full h-64 object-cover">
+        function render(items) {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = items.map(p => `
+                <div class="product-card shadow-sm">
+                    <img src="${p.i}" class="w-full h-64 object-cover">
                     <div class="p-4 text-center">
-                        <p class="text-[9px] text-pink-400 font-bold uppercase mb-1">${x.c}</p>
-                        <h3 class="text-xs font-semibold mb-2 italic">"${x.n}"</h3>
-                        <p class="font-bold text-gray-900 mb-4 font-serif text-lg">RD$ ${x.pr}</p>
-                        <a href="https://wa.me/18490000000" class="block bg-black text-white py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest hover:bg-pink-500">Pedir WhatsApp</a>
+                        <p class="text-[9px] text-pink-500 font-bold uppercase mb-1">${p.c}</p>
+                        <h3 class="text-[11px] font-semibold mb-2 italic h-8">"${p.n}"</h3>
+                        <p class="font-bold text-gray-900 mb-4 text-lg">RD$ ${p.p}</p>
+                        <a href="https://wa.me/18490000000" target="_blank" class="block bg-black text-white py-3 rounded-xl text-[9px] font-bold uppercase tracking-widest hover:bg-pink-500 transition-colors shadow-md">
+                            WhatsApp
+                        </a>
                     </div>
                 </div>
             `).join('');
         }
 
-        function f(c) {
+        function filter(cat) {
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active-cat', 'text-gray-400'));
-            document.getElementById('b-' + c).classList.add('active-cat');
-            r(c === 'todos' ? p : p.filter(i => i.c === c));
+            document.getElementById('btn-' + cat).classList.add('active-cat');
+            render(cat === 'todos' ? clothes : clothes.filter(x => x.c === cat));
         }
 
-        window.onload = () => r(p);
+        document.addEventListener('DOMContentLoaded', () => render(clothes));
     </script>
 </body>
 </html>
